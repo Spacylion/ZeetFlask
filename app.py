@@ -9,8 +9,8 @@ import json
 
 load_dotenv()
 
-application = Flask(__name__)
-CORS(application)
+app = Flask(__name__)
+CORS(app)
 
 
 engine_id = "stable-diffusion-v1-5"
@@ -22,7 +22,7 @@ if api_key is None:
     raise Exception("Missing Stability API key.")
 
 
-@application.route("/generate", methods=["POST"])
+@app.route("/generate", methods=["POST"])
 def create():
     prompt = request.args.get("prompt")
     response = requests.post(
@@ -55,7 +55,7 @@ def create():
     return jsonify({"image": image_base64})
 
 
-@application.route("/uploadToIpfs", methods=["POST"])
+@app.route("/uploadToIpfs", methods=["POST"])
 def upload_to_ipfs():
     content = request.json["content"]
 
@@ -74,7 +74,7 @@ def upload_to_ipfs():
     return result
 
 
-@application.route("/uploadUri", methods=["POST"])
+@app.route("/uploadUri", methods=["POST"])
 def upload_uri():
     img = request.json["img"]
     content = {
@@ -101,7 +101,7 @@ def upload_uri():
     return result
 
 
-@application.route("/get_nfts", methods=["GET"])
+@app.route("/get_nfts", methods=["GET"])
 def get_nfts():
     address = request.args.get("address")
     params = {
@@ -122,4 +122,5 @@ def get_nfts():
 
 
 if __name__ == "__main__":
-    application.run(host='127.0.0.1', port=5002)
+    # app.run(host='127.0.0.1', port=5002)
+    app.run(host='0.0.0.0', port=5000)
